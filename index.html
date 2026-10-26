@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="sbk emotors — سكوترات كهربائية للمشاوير اليومية">
-<title>sbk emotors | سكوترات كهربائية</title>
+<meta name="description" content="Hadi E-Bikes — سكوترات كهربائية للمشاوير اليومية">
+<title>Hadi E-Bikes | سكوترات كهربائية</title>
 <link rel="icon" href="favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -24,7 +24,7 @@ html{scroll-behavior:smooth}body{font-family:'IBM Plex Sans Arabic','Segoe UI',T
 <header class="fixed inset-x-0 top-0 z-50 border-b border-line/80 bg-white/90 glass">
   <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
     <a href="#top" class="flex shrink-0 items-center gap-3 font-bold text-lg">
-      <span class="grid size-10 place-items-center rounded-2xl bg-navy text-white text-xl shadow-sm">ϟ</span><span>sbk emotors</span>
+      <span class="grid size-10 place-items-center rounded-2xl bg-navy text-white text-xl shadow-sm">ϟ</span><span>Hadi E-Bikes</span>
     </a>
     <nav class="desktop-nav hidden items-center gap-7 lg:flex" aria-label="أقسام الصفحة"></nav>
     <div class="flex items-center gap-2"><a href="#order" class="hidden sm:inline-flex min-h-11 items-center justify-center rounded-full bg-sky px-5 text-sm font-bold text-white shadow-sm transition hover:bg-sky-dark">اطلب دوك</a><button id="menuBtn" class="grid size-11 place-items-center rounded-full border border-line bg-white text-xl lg:hidden" type="button" aria-expanded="false" aria-label="حل القائمة">☰</button></div>
@@ -36,7 +36,7 @@ html{scroll-behavior:smooth}body{font-family:'IBM Plex Sans Arabic','Segoe UI',T
   <div id="content" class="flex flex-col justify-center px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
     <span class="w-fit rounded-full bg-mist px-4 py-2 text-sm font-semibold text-navy">الاستلام من المحل بعد مكالمة التأكيد</span>
     <h1 class="mt-6 max-w-2xl text-balance text-5xl font-bold leading-[1.15] tracking-tight sm:text-6xl lg:text-7xl">بلا صونس،<br><span class="text-sky">وبلا زحمة.</span></h1>
-    <p class="mt-6 max-w-xl text-lg leading-8 text-muted sm:text-xl">في sbk emotors تلقى SAEA و NIU و Rex و Ninja. تشارجي في الدار، تمشي للخدمة وترجع. السومة مكتوبة بالدينار، بلا مصاريف مخبّية.</p>
+    <p class="mt-6 max-w-xl text-lg leading-8 text-muted sm:text-xl">في Hadi E-Bikes تلقى SAEA و NIU و Rex و Ninja. تشارجي في الدار، تمشي للخدمة وترجع. السومة مكتوبة بالدينار، بلا مصاريف مخبّية.</p>
     <div class="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#order" class="inline-flex min-h-13 items-center justify-center rounded-full bg-sky px-7 font-bold text-white shadow-[0_12px_28px_rgba(7,153,215,.25)] transition hover:-translate-y-0.5 hover:bg-sky-dark">اطلب دوك <span class="mr-2 text-lg">←</span></a><a href="#pricing" class="inline-flex min-h-13 items-center justify-center rounded-full border border-line bg-white px-7 font-bold transition hover:border-sky hover:text-sky">شوف الأسعار</a></div>
     <div class="mt-12 grid max-w-xl grid-cols-3 gap-4 border-t border-line pt-6"><div><p class="text-xs text-muted">المسافة</p><p class="mt-1 text-xl font-bold">50–80 كم</p></div><div><p class="text-xs text-muted">حتى تشارجى</p><p class="mt-1 text-xl font-bold">5–6 سوايع</p></div><div><p class="text-xs text-muted">الشارج</p><p class="mt-1 text-xl font-bold">من الدار</p></div></div>
   </div>
@@ -48,6 +48,6 @@ html{scroll-behavior:smooth}body{font-family:'IBM Plex Sans Arabic','Segoe UI',T
 <section id="reviews" class="scroll-mt-24 bg-white"><div class="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28"><p class="text-sm font-bold text-sky">آراء اللي شرو</p><h2 class="mt-2 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">ناس جرّبوها في مشوار الخدمة، ماشي في إشهار</h2><div id="reviewsGrid" class="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4"></div><a href="#order" class="mt-10 inline-flex min-h-12 items-center justify-center rounded-full bg-sky px-6 font-bold text-white">حاب تجرّب؟ ابعث الطلب ←</a></div></section>
 <section id="order" class="scroll-mt-24 bg-mist"><div class="mx-auto grid max-w-7xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:py-28"><div><p class="text-sm font-bold text-sky">الطلب</p><h2 class="mt-2 text-balance text-4xl font-bold leading-tight sm:text-5xl">اطلب <span id="chosenName">NIU</span>. نعيّطولك نأكدو.</h2><p class="mt-5 max-w-xl text-lg leading-8 text-muted">عبّي المعلومات، ونرجعلك بمكالمة على التيليفون. الاستلام من المحل.</p><ol class="mt-10 space-y-5"><li class="flex gap-4"><b class="grid size-10 shrink-0 place-items-center rounded-full bg-navy text-white">1</b><span><strong class="block">عبّي الطلب</strong><small class="mt-1 block text-muted">الاسم، التيليفون، الولاية، والموديل.</small></span></li><li class="flex gap-4"><b class="grid size-10 shrink-0 place-items-center rounded-full bg-navy text-white">2</b><span><strong class="block">نعيّطولك</strong><small class="mt-1 block text-muted">مكالمة قصيرة نأكدو فيها واش اخترت.</small></span></li><li class="flex gap-4"><b class="grid size-10 shrink-0 place-items-center rounded-full bg-navy text-white">3</b><span><strong class="block">الاستلام</strong><small class="mt-1 block text-muted">تجي تدي سلعتك ولا نرسلوهلك.</small></span></li></ol></div><div id="formArea"></div></div></section>
 </main>
-<footer class="bg-[#061f35] text-white"><div class="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between"><div><strong class="text-xl">sbk emotors</strong><p class="mt-2 max-w-md text-sm leading-7 text-slate-300">سكوترات كهربائية للمشاوير اليومية. السومة مكتوبة على كل موديل، والاستلام من المحل.</p></div><nav id="footerNav" class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300"></nav></div></footer>
+<footer class="bg-[#061f35] text-white"><div class="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between"><div><strong class="text-xl">Hadi E-Bikes</strong><p class="mt-2 max-w-md text-sm leading-7 text-slate-300">سكوترات كهربائية للمشاوير اليومية. السومة مكتوبة على كل موديل، والاستلام من المحل.</p></div><nav id="footerNav" class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300"></nav></div></footer>
 <script src="script.js"></script>
 </body></html>
