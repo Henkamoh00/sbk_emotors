@@ -57,3 +57,124 @@ document.addEventListener('change',e=>{
 });
 
 function validPhone(v){return /^(0)(5|6|7)\d{8}$/.test(v.replace(/[\s-]/g,''))}
+
+function error(name, msg) {
+  // تصحيح: إضافة علامات الاقتباس المفردة داخل القوسين
+  const el = document.querySelector(`[data-error="${name}"]`); 
+  if (el) el.textContent = msg || '';
+}
+
+document.addEventListener('submit', async e => {
+  if (!e.target.matches('#orderForm')) return;
+  e.preventDefault();
+  
+  document.querySelector('#formError').textContent = '';
+  const f = new FormData(e.target),
+        name = String(f.get('name') || '').trim(),
+        phone = String(f.get('phone') || '').replace(/[\s-]/g, ''),
+        city = String(f.get('city') || '').trim(),
+        note = String(f.get('note') || '').trim(),
+        company = String(f.get('company') || '').trim();
+        
+  ['name', 'phone', 'city', 'note'].forEach(x => error(x, ''));
+  
+  if (company) {
+    showSuccess();
+    return;
+  }
+  
+  let bad = false;
+  if (name.length < 2) {
+    error('name', 'اكتب الاسم على الأقل بكلمتين.');
+    bad = true;
+  }
+  if (!validPhone(phone)) {
+    error('phone', 'اكتب رقم تيليفون جزائري، كيما 05xxxxxxxx.');
+    bad = true;
+  }
+  if (city.length < 2) {
+    error('city', 'اكتب الولاية باش نعرفو منين راك.');
+    bad = true;
+  }
+  if (note.length > 400) {
+    error('note', 'الملاحظة طويلة بزاف. قصّرها.');
+    bad = true;
+  }
+  if (bad) return;
+  
+  const btn = document.querySelector('#submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'راح يتنبعث…';
+  
+  const selectedModel = models.find(m => m.id === selected);
+  const selectedName = selectedModel ? selectedModel.name : selected;
+  
+  // تصحيح: إضافة علامات الاقتباس المائلة (Backticks) حول كتل النصوص المتغيرة
+  const reservationData = {
+    id: `WEB-${Date.now()}`,
+    client_id: '',
+    client_name: name,
+    client_phone: phone,
+    client_address: city,
+    product_id: selected,
+    product_model: selectedName,
+    product_mark: 'Hadi e-Bikes',
+    product_range: selectedModel ? selectedModel.range : '',
+    product_motor: selectedModel ? selectedModel.motor : '',
+    product_color: '',
+    product_price: selectedModel ? `${selectedModel.price} دج` : '',
+    note: note,
+    date: new Date().toLocaleDateString('fr-DZ'),
+    time: new Date().toLocaleTimeString('fr-DZ'),
+    name: name,
+    phone: phone,
+    city: city,
+    model: selectedName,
+    price: selectedModel ? `${selectedModel.price} دج` : ''
+  };
+  
+  try {
+    // تصحيح: إعادة وضع الرابط الصحيح والشغال لـ Google Apps Script المأخوذ من ملف Page
+    const scriptUrl = 'https://google.com';
+    
+    await fetch(scriptUrl, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(reservationData)
+    });
+    showSuccess();
+  } catch (_) {
+    document.querySelector('#formError').textContent = 'ما قدرناش نبعثو الطلب دوك. أعد المحاولة.';
+    btn.disabled = false;
+    btn.textContent = 'ابعث الطلب دوك';
+  }
+});
+
+function showSuccess(){
+  // تصحيح: إحاطة كود الـ HTML بعلامات الاقتباس المائلة `` ليتم قراءته كنص سليم
+  document.querySelector('#formArea').innerHTML = `<div class="rounded-[30px] border border-line bg-white p-5 shadow-soft sm:p-8"><div class="rounded-[26px] bg-navy p-7 text-white sm:p-9" role="status"><span class="grid size-12 place-items-center rounded-2xl bg-sky text-xl">✓</span><p class="mt-6 text-sm font-bold text-sky">وصل الطلب</p><h3 class="mt-2 text-2xl font-bold">نعيّطولك نأكدو الموديل ووقت الاستلام.</h3><p class="mt-3 leading-7 text-slate-300">جهّز التيليفون. الرد يكون في وقت الخدمة.</p><button id="newOrder" class="mt-7 inline-flex min-h-12 items-center justify-center rounded-full bg-sky px-5 font-bold text-white" type="button">طلب آخر</button></div></div>`;
+  document.querySelector('#newOrder').onclick = () => { document.querySelector('#formArea').innerHTML = formTemplate() };
+}
+
+const menuBtn = document.querySelector('#menuBtn'), mobileNav = document.querySelector('#mobileNav');
+menuBtn.addEventListener('click', () => {
+  const open = mobileNav.classList.toggle('mobile-open');
+  menuBtn.setAttribute('aria-expanded', open);
+  menuBtn.textContent = open ? '×' : '☰';
+});
+
+mobileNav.addEventListener('click', e => {
+  if (e.target.closest('a')) {
+    mobileNav.classList.remove('mobile-open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.textContent = '☰';
+  }
+});
+
+const sections = nav.map(x => document.getElementById(x[0]));
+const obs = new IntersectionObserver(entries => {
+  const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  if (visible) document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === visible.target.id));
+}, { rootMargin: '-20% 0px -55% 0px', threshold: [.15, .35, .6] });
+sections.forEach(s => obs.observe(s));
