@@ -134,8 +134,7 @@ document.addEventListener('submit', async e => {
   };
   
   try {
-    // تصحيح: إعادة وضع الرابط الصحيح والشغال لـ Google Apps Script المأخوذ من ملف Page
-    const scriptUrl = 'https://google.com';
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzURIkNST_yMIVenK14M-CJ73gmjlS_MuUn3M9J-aI5T4jwUQaqfcg60B5lQVHhUyun/exec';
     
     await fetch(scriptUrl, {
       method: 'POST',
