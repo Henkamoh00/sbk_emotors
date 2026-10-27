@@ -1,91 +1,59 @@
-'use client'
+const models=[
+{id:'saea',name:'SAEA',price:189000,tagline:'للحي والمشاوير القصار',range:'50 كم',charge:'5 سوايع',motor:'1000 واط',image:'bikes/saea.jpg',alt:'سكوتر SAEA أبيض، شكل عملي للمدينة',points:['خفيفة في الزنقة والحي','الشارجور يجي معاها','تليق كي المشوار قريب']},
+{id:'niu',name:'NIU',price:469000,tagline:'اختيار نهار الخدمة',range:'80 كم',charge:'6 سوايع',motor:'2400 واط',image:'bikes/niu.jpg',alt:'سكوتر NIU أبيض بمقعد أسود وإضاءة رفيعة',featured:true,points:['مسافة أطول ليوم كامل','شاشة سرعة وضو قدّام','اللي يشريوه الناس بزاف']},
+{id:'rex',name:'Rex',price:249000,tagline:'توازن مريح في الزنقة',range:'60 كم',charge:'5 سوايع',motor:'1500 واط',image:'bikes/rex.jpg',alt:'سكوتر Rex رمادي غامق للاستعمال اليومي',points:['ثابتة في المنعرجات','المقعد يطلع وينزل','البطارية تكفي مشوارين']},
+{id:'ninja',name:'Ninja',price:319000,tagline:'شكل رياضي والطريق مفتوح',range:'70 كم',charge:'6 سوايع',motor:'2000 واط',image:'bikes/ninja.jpg',alt:'سكوتر Ninja كحلي بخط أزرق سماوي',points:['الفرامل تمسك بسرعة','تطلع المرتفعات الخفيفة','عجلات أعرض على الطريق']}
+];
+const features=[['↯','المسافة مكتوبة على كل موديل','من 50 كم في SAEA حتى 80 كم في NIU. الرقم اللي في البطاقة هو مسافة الاستعمال العادي، ماشي جملة عامة.'],['⌁','الشارج من فيش الدار','الشارجور يجي مع السكوتر. تدخّلو في فيش عادي، ومن 5 حتى 6 سوايع ترجع البطارية عامرة.'],['◉','سرعة الزنقة، ماشي السيركي','الموتور يعاونك تمشي مع السير بلا ما تتعب في أول طلعة ولا كي الريح ضدّك.'],['◇','فرامل تمسك وقت اللي تسحق','فرامل قدّام ووراء. نقلّبو عليهم في المحل قبل ما تخرج بالسكوتر.'],['⌁','قطع الغيار في المحل','الفرامل، العجلات، وأسئلة البطارية. إلا حبيت تبدّل ولا تسأل، تلاقاهم عند Hadi E-Bikes.'],['▰','أربع ماركات في بلاصة واحدة','SAEA و NIU و Rex و Ninja. تختار على قد المشوار والسومة، وتدي السكوتر من المحل.']];
+const reviews=[['أمينة بوزيد','الجزائر','NIU','نروح للخدمة ونرجع بلا ما ندوّر على الباركينغ. الشارج يكفيني نهار الخدمة، ونشارجي في الليل كيما التيليفون.'],['ياسين مرابط','وهران','SAEA','شريت SAEA والسومة كانت كيما قالولي في المحل، بلا حاجة زيادة. خفيفة في الزنقة وتكفي مشاوير الحي.'],['لينة بن يوسف','قسنطينة','Rex','بدّلت المشاوير القصار تاع الطوموبيل بالسكوتر. في آخر الشهر الصونس نقص، والباركينغ ما بقاش يهمني.'],['رضا شريف','عنابة','Ninja','Ninja ثابتة في الكورنيش. الفرامل تمسك من أول ضغطة، وما حسّيتهاش ثقيلة بزاف.']];
+const nav=[['value','علاش'],['features','التفاصيل'],['pricing','الأسعار'],['reviews','الآراء'],['order','الطلب']];
+const wilayas=['الجزائر','وهران','قسنطينة','عنابة','سطيف','البليدة','باتنة','تلمسان','بجاية','الشلف','سيدي بلعباس','ورقلة','بسكرة','تيبازة','بومرداس'];
+let selected='niu';
+const price=n=>new Intl.NumberFormat('fr-DZ',{maximumFractionDigits:0}).format(n)+' دج';
+const navHtml=nav.map(([id,label])=>`<a href="#${id}" data-nav="${id}" class="nav-link py-2 text-sm font-semibold text-ink transition hover:text-sky">${label}</a>`).join('');
+document.querySelector('.desktop-nav').innerHTML=navHtml;
+document.querySelector('#mobileNav').innerHTML=navHtml.replaceAll('nav-link py-2','block border-b border-line/70 py-3');
+document.querySelector('#footerNav').innerHTML=nav.map(([id,label])=>`<a href="#${id}" class="hover:text-white">${label}</a>`).join('');
+document.querySelector('#featuresGrid').innerHTML=features.map((f,i)=>`<article class="feature-card rounded-3xl border border-line bg-white p-6"><div class="flex items-center justify-between"><span class="grid size-12 place-items-center rounded-2xl bg-mist text-xl font-bold text-sky">${f[0]}</span><span class="text-xs font-bold tracking-widest text-slate-300">0${i+1}</span></div><h3 class="mt-7 text-lg font-bold">${f[1]}</h3><p class="mt-2 text-sm leading-7 text-muted">${f[2]}</p></article>`).join('');
 
-import { FormEvent, useEffect, useState } from 'react'
-import { ArrowRight, Bike, CheckCircle2, Phone } from 'lucide-react'
-import { products } from '@/lib/products'
-
-const models = products.map((item) => ({ ...item, price: `${item.price} دج` }))
-
-export default function OrderPage() {
-  const [model, setModel] = useState(products[0]?.id || '')
-  const [submitted, setSubmitted] = useState(false)
-
-  useEffect(() => {
-    const requestedModel = new URLSearchParams(window.location.search).get('model')
-    if (requestedModel && models.some((item) => item.id === requestedModel)) setModel(requestedModel)
-  }, [])
-  const [isSending, setIsSending] = useState(false)
-  const [error, setError] = useState('')
-
-  async function submit() {
-    event.preventDefault()
-    const form = event.currentTarget
-    const data = new FormData(form)
-    const name = String(data.get('name') || '').trim()
-    const phone = String(data.get('phone') || '').replace(/[\s-]/g, '')
-    const city = String(data.get('city') || '').trim()
-    const selectedModel = models.find((item) => item.id === model)
-
-    if (name.length < 2 || !/^(0)(5|6|7)\d{8}$/.test(phone) || city.length < 2) {
-      setError('يرجى كتابة الاسم ورقم هاتف جزائري صحيح والولاية.')
-      return
-    }
-
-    setError('')
-    setIsSending(true)
-
-    try {
-      const selectedName = selectedModel?.name || model
-      const reservationData = {
-        id: `WEB-${Date.now()}`,
-        client_id: '',
-        client_name: name,
-        client_phone: phone,
-        client_address: city,
-        product_id: model,
-        product_model: selectedName,
-        product_mark: 'Hadi e-Bikes',
-        product_range: selectedModel?.range || '',
-        product_motor: selectedModel?.motor || '',
-        product_color: '',
-        product_price: selectedModel?.price || '',
-        note: String(data.get('note') || '').trim(),
-        date: new Date().toLocaleDateString('fr-DZ'),
-        time: new Date().toLocaleTimeString('fr-DZ'),
-        name,
-        phone,
-        city,
-        model: selectedName,
-        price: selectedModel?.price || '',
-      }
-
-      await fetch('https://script.google.com/macros/s/AKfycbzURIkNST_yMIVenK14M-CJ73gmjlS_MuUn3M9J-aI5T4jwUQaqfcg60B5lQVHhUyun/exec', {
-        method: 'POST',
-        redirect: 'follow',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(reservationData),
-      })
-      setSubmitted(true)
-      form.reset()
-    } catch {
-      setError('تعذر إرسال الطلب حالياً. يرجى المحاولة مجدداً أو الاتصال بنا مباشرة.')
-    } finally {
-      setIsSending(false)
-    }
-  }
-
-  return (
-    <main dir="rtl" className="min-h-screen bg-[#f8fcfd] text-[#11243d]">
-      <header className="border-b border-[#e9f0f4] bg-white px-5 py-5 md:px-12">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-          <a href="/" dir="ltr" className="flex items-center gap-2 whitespace-nowrap text-xl font-black"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#bdeefa] text-[#087ca8]"><Bike size={21} /></span> Hadi <span className="text-[#1599c5]">e-Bikes</span></a>
-          <a href="/" className="flex items-center gap-2 rounded-full border border-[#d6e8ee] px-4 py-2 text-sm font-bold text-[#087ca8]"><ArrowRight size={16} /> العودة للمتجر</a>
-        </div>
-      </header>
-      <section className="mx-auto max-w-3xl px-5 py-12 md:px-8 md:py-20">
-        <div className="mb-8 text-center"><p dir="ltr" className="mb-3 text-xs font-black tracking-widest text-[#1599c5]">Hadi e-Bikes</p><h1 className="text-4xl font-black md:text-5xl">سجّل طلبك</h1><p className="mt-4 leading-8 text-[#667b89]">املأ المعلومات وسنتصل بك لتأكيد الموديل ووقت الاستلام.</p></div>
-        {submitted ? <div className="rounded-[2rem] bg-[#11243d] p-8 text-center text-white shadow-xl md:p-12"><CheckCircle2 className="mx-auto text-[#7cdbef]" size={54} /><p className="mt-6 text-sm font-bold text-[#7cdbef]">وصل الطلب</p><h2 className="mt-3 text-2xl font-black">سنتصل بك لتأكيد طلبك.</h2><p className="mt-3 leading-7 text-[#b7cbd4]">جهّز هاتفك، وسيكون الرد خلال أوقات العمل.</p><button onClick={() => setSubmitted(false)} className="mt-8 rounded-full bg-[#7cdbef] px-6 py-3 text-sm font-black text-[#11243d]">طلب آخر</button></div> : <form onSubmit={submit} className="rounded-[2rem] border border-[#e3eef2] bg-white p-6 shadow-sm md:p-9"><div className="grid gap-5 sm:grid-cols-2"><label className="text-sm font-bold">الاسم<input name="name" className="mt-2 w-full rounded-2xl border border-[#dcebf0] px-4 py-3 outline-none transition focus:border-[#1599c5]" placeholder="مثال: أمينة بوزيد" /></label><label className="text-sm font-bold">الهاتف<input name="phone" inputMode="tel" className="mt-2 w-full rounded-2xl border border-[#dcebf0] px-4 py-3 outline-none transition focus:border-[#1599c5]" placeholder="05xxxxxxxx" /></label><label className="text-sm font-bold sm:col-span-2">الولاية<input name="city" className="mt-2 w-full rounded-2xl border border-[#dcebf0] px-4 py-3 outline-none transition focus:border-[#1599c5]" placeholder="مثال: الجزائر" /></label></div><div className="mt-7"><p className="text-sm font-bold">اختر الموديل</p><div className="mt-3 grid gap-3 sm:grid-cols-2">{models.map((item) => <label key={item.id} className={`cursor-pointer rounded-2xl border p-4 transition ${model === item.id ? 'border-[#1599c5] bg-[#effaff]' : 'border-[#e3eef2]'}`}><input type="radio" name="model" value={item.id} checked={model === item.id} onChange={() => setModel(item.id)} className="sr-only" /><span className="flex items-center justify-between"><b>{item.name}</b><span className="text-sm font-bold text-[#1599c5]">{item.price}</span></span><span className="mt-2 block text-xs text-[#8497a1]">مدى {item.range} · محرك {item.motor}</span></label>)}</div></div><label className="mt-6 block text-sm font-bold">ملاحظة <span className="font-normal text-[#8497a1]">(اختياري)<textarea name="note" rows={3} className="mt-2 w-full resize-none rounded-2xl border border-[#dcebf0] px-4 py-3 outline-none focus:border-[#1599c5]" placeholder="أي تفاصيل إضافية؟" /></span></label>{error && <p className="mt-4 rounded-xl bg-[#fff1ef] px-4 py-3 text-sm font-bold text-[#c75f54]" role="alert">{error}</p>}<button type="submit" className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#1599c5] px-6 py-4 text-sm font-black text-white transition hover:bg-[#087ca8]">إرسال الطلب <ArrowRight size={17} /></button><a href="tel:0784076823" className="mt-4 flex items-center justify-center gap-2 text-sm font-bold text-[#087ca8]"><Phone size={16} /> للاستفسار: 0784076823</a></form>}
-      </section>
-    </main>
-  )
+function renderModels(){
+  document.querySelector('#modelsGrid').innerHTML=models.map(m=>`<article class="model-card ${m.id===selected?'selected':''} overflow-hidden rounded-[28px] border border-line bg-white ${m.featured?'ring-1 ring-sky/20':''}"><div class="relative aspect-[4/3] overflow-hidden bg-slate-100"><img src="${m.image}" alt="${m.alt}" class="size-full object-cover transition duration-500 hover:scale-105"><div class="absolute inset-x-3 top-3 flex items-center justify-between gap-2">${m.featured?'<span class="rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-navy shadow-sm">الأكثر طلبا</span>':'<span></span>'}<span class="rounded-full bg-navy/90 px-3 py-1.5 text-xs font-bold text-white">${m.range}</span></div></div><div class="p-5"><div class="flex items-start justify-between gap-3"><div><h3 class="text-2xl font-bold">${m.name}</h3><p class="mt-1 text-sm text-muted">${m.tagline}</p></div></div><p class="mt-5 text-2xl font-bold text-navy">${price(m.price)}</p><div class="mt-5 grid grid-cols-3 gap-2 rounded-2xl bg-mist p-3 text-center"><div><b class="block text-sm">${m.range}</b><small class="text-[11px] text-muted">مسافة</small></div><div><b class="block text-sm">${m.charge}</b><small class="text-[11px] text-muted">شارج</small></div><div><b class="block text-sm">${m.motor}</b><small class="text-[11px] text-muted">موتور</small></div></div><ul class="mt-5 space-y-2 text-sm text-muted">${m.points.map(p=>`<li class="flex gap-2"><span class="text-sky">✓</span><span>${p}</span></li>`).join('')}</ul><button class="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-sky px-4 font-bold text-white transition hover:bg-sky-dark" data-order-model="${m.id}" type="button">نطلب ${m.name}</button></div></article>`).join('');
+  document.querySelectorAll('[data-order-model]').forEach(b=>b.addEventListener('click',()=>chooseModel(b.dataset.orderModel)))
 }
+renderModels();
+
+document.querySelector('#reviewsGrid').innerHTML=reviews.map(r=>`<figure class="review-card rounded-3xl border border-line bg-white p-6"><div class="flex gap-1 text-sky" aria-label="تقييم خمس نجوم من خمس">★★★★★</div><blockquote class="mt-5 min-h-[120px] text-sm leading-7 text-ink">«${r[3]}»</blockquote><figcaption class="mt-6 flex items-center justify-between gap-3 border-t border-line pt-4"><span class="flex items-center gap-3"><span class="grid size-10 place-items-center rounded-full bg-navy text-sm font-bold text-white">${r[0].slice(0,1)}</span><span><strong class="block text-sm">${r[0]}</strong><small class="text-xs text-muted">${r[1]}</small></span></span><span class="rounded-full bg-mist px-3 py-1 text-xs font-bold text-navy">${r[2]}</span></figcaption></figure>`).join('');
+
+function syncModelSelection(){
+  document.querySelectorAll('input[name="model"]').forEach(input=>{
+    const checked=input.value===selected;
+    input.checked=checked;
+    input.closest('.choice')?.classList.toggle('selected',checked)
+  });
+  const chosen=models.find(m=>m.id===selected)||models[1];
+  const chosenName=document.querySelector('#chosenName');
+  if(chosenName)chosenName.textContent=chosen.name
+}
+
+function chooseModel(id){
+  selected=id;
+  syncModelSelection();
+  renderModels();
+  document.querySelector('#order').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  setTimeout(()=>document.querySelector('#order-name')?.focus({preventScroll:true}),450)
+}
+
+function formTemplate(){
+  return `<div class="rounded-[30px] border border-line bg-white p-5 shadow-soft sm:p-8"><form id="orderForm" novalidate><div class="flex items-start justify-between gap-4"><div><h3 class="text-2xl font-bold">معلومات الطلب</h3><p class="mt-2 text-sm leading-6 text-muted">دقيقة تعمير. من بعد نعيّطولك على التيليفون اللي كتبته.</p></div><span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-mist text-sky">ϟ</span></div><div class="absolute -left-[9999px] h-0 overflow-hidden" aria-hidden="true"><label>الشركة<input tabindex="-1" autocomplete="off" name="company"></label></div><div class="mt-7 grid gap-4 sm:grid-cols-2"><label class="text-sm font-bold">الاسم<input id="order-name" class="input" name="name" autocomplete="name" placeholder="مثال: أمينة بوزيد"><span class="error" data-error="name"></span></label><label class="text-sm font-bold">التيليفون<input id="order-phone" class="input" name="phone" autocomplete="tel" inputmode="tel" placeholder="05xxxxxxxx"><span class="error" data-error="phone"></span></label><label class="sm:col-span-2 text-sm font-bold">الولاية<input id="order-city" class="input" name="city" list="wilayas" autocomplete="address-level1" placeholder="مثال: الجزائر"><datalist id="wilayas">${wilayas.map(w=>`<option value="${w}">`).join('')}</datalist><span class="error" data-error="city"></span></label><div class="sm:col-span-2"><span class="text-sm font-bold">الموديل</span><div class="mt-2 grid gap-2 sm:grid-cols-2">${models.map(m=>`<label class="choice flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-2xl border border-line px-4 transition"><input class="sr-only" type="radio" name="model" value="${m.id}" ${m.id===selected?'checked':''}><span class="font-semibold">${m.name}</span><span class="text-sm text-muted">${price(m.price)}</span></label>`).join('')}</div></div><label class="sm:col-span-2 text-sm font-bold">ملاحظة <span class="font-normal text-muted">(إلا حبيت)</span><textarea id="order-note" class="input resize-y" name="note" rows="3" placeholder="وقت يريك للاستلام"></textarea><span class="error" data-error="note"></span></label></div><p id="formError" class="error"></p><button id="submitBtn" class="mt-6 inline-flex min-h-13 w-full items-center justify-center rounded-full bg-sky px-5 font-bold text-white transition hover:bg-sky-dark disabled:cursor-not-allowed disabled:opacity-60" type="submit">ابعث الطلب دوك</button><p class="mt-3 text-center text-xs text-muted">ما نستعملوش معلوماتك غير باش نأكدو هذا الطلب.</p></form></div>`
+}
+document.querySelector('#formArea').innerHTML=formTemplate();
+
+document.addEventListener('change',e=>{
+  if(e.target.matches('input[name="model"]')){
+    selected=e.target.value;
+    syncModelSelection();
+    renderModels()
+  }
+});
+
+function validPhone(v){return /^(0)(5|6|7)\d{8}$/.test(v.replace(/[\s-]/g,''))}
